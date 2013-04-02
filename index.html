@@ -2,48 +2,6 @@
 <head>
   <meta charset="UTF-8">
   <title>Socket IO testing</title>
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-  <script src="/socket.io/socket.io.js"></script>
-  <script>
-  $(function(){
-    // create the socket connection
-    var iosocket = io.connect();
-    iosocket.on('connect', function () {
-      $('#incomingChatMessages').append($('<li>Connected</li>'));
-
-      iosocket.on('message', function(message) {
-        $('#incomingChatMessages').append($('<li></li>').text(message));
-      });
-      // what happens when this event occurs
-      iosocket.on('counter', function(count) {
-        $('#count').text(count);
-      });
-      iosocket.on('disconnect', function() {
-        $('#incomingChatMessages').append('<li>Disconnected</li>');
-      });
-    });
-
-    // get the lastest count from the server
-    $(document).ready(function() {
-      iosocket.emit('counter', 0);
-    })
-    // trigger an event emit on the increase click
-    $('#increase').on('click',function(event) {
-      event.preventDefault();
-      iosocket.emit('counter', 1);
-    })
-
-    $('#outgoingChatMessage').keypress(function(event) {
-      if(event.which == 13) {
-        event.preventDefault();
-        var tosend = $('#clientname').val()+': '+$('#outgoingChatMessage').val();
-        iosocket.send(tosend);
-        $('#incomingChatMessages').append($('<li></li>').text(tosend));
-        $('#outgoingChatMessage').val('');
-      }
-    });
-  });
-  </script>
 </head>
 <body>
   <span id="count">0</span>&nbsp;&nbsp;&nbsp;<a href="#" id="increase">increase</a>
@@ -51,8 +9,55 @@
   <input id="clientname" value="" placeholder="your name" type="text" />
   <br />
   Incoming Chat: <ul id="incomingChatMessages"></ul>
-
-
   <input type="text" id="outgoingChatMessage">
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+  <!-- here is the generated socket file -->
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+  $(function(){
+    // create the socket connection
+    var socket = io.connect();
+    socket.on('connect', function () {
+      $('#incomingChatMessages').append('<li>Connected</li>');
+      // listen for messages and do something when they are heard
+      socket.on('message', function(message) {
+        // create an li and insert the message
+        $('#incomingChatMessages').append($('<li></li>').text(message));
+      });
+      // what happens when this event occurs
+      socket.on('counter', function(count) {
+        $('#count').text(count);
+      });
+      // let us know we have disconnected
+      socket.on('disconnect', function() {
+        $('#incomingChatMessages').append('<li>Disconnected</li>');
+      });
+    });
+
+    // get the lastest count from the server
+    $(document).ready(function() {
+      socket.emit('counter', 0);
+    })
+    // trigger an event emit on the increase click
+    $('#increase').on('click',function(event) {
+      event.preventDefault();
+      socket.emit('counter', 1);
+    })
+
+    $('#outgoingChatMessage').keypress(function(event) {
+      if(event.which == 13) {
+        event.preventDefault();
+        // grab the inpul value and the inside text
+        var tosend = $('#clientname').val()+': '+$('#outgoingChatMessage').val();
+        // send out the message
+        socket.send(tosend);
+        // do this locally as well
+        $('#incomingChatMessages').append($('<li></li>').text(tosend));
+        // clear out the input now that the message is sent
+        $('#outgoingChatMessage').val('');
+      }
+    });
+  });
+</script>
 </body>
 </html>
