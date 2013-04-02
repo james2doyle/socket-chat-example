@@ -1,15 +1,12 @@
 {
-  "name": "sockettest",
+  "name": "socketchat",
   "version": "1.0.0",
-  "description": "socket io testing",
+  "description": "socket io chat app",
   "main": "app.js",
-  "scripts": {
-    "test": "test"
-  },
   "dependencies": {
     "socket.io": "*"
   },
-  "repository": "",
+  "repository": "https://github.com/james2doyle/socket-chat-example",
   "author": "james2doyle",
   "license": "BSD"
 }
