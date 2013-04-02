@@ -1,0 +1,15 @@
+{
+  "name": "sockettest",
+  "version": "1.0.0",
+  "description": "socket io testing",
+  "main": "app.js",
+  "scripts": {
+    "test": "test"
+  },
+  "dependencies": {
+    "socket.io": "*"
+  },
+  "repository": "",
+  "author": "james2doyle",
+  "license": "BSD"
+}
